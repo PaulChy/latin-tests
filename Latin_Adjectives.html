@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html><html><!-- saved from url=(0014)about:internet -->
+<head>
+<style> 
+	body {font-family : Arial}	
+	h2, h3 {color : navy}	 
+	input {font-size: 100%; width : 4em}
+	td.gender {font-weight : bold; text-align: center; background-color : silver}	
+
+</style>
+<script>
+	var adjectives = [{name : "Multus", altStem : "", stem : "mult", nomMS: "us", vocMS :"e", accMS : "um", genMS : "ī", datMS : "ō", ablMS : "ō",
+				nomFS: "a", vocFS :"a", accFS : "am", genFS : "ae", datFS : "ae", ablFS : "ā", 
+				nomNS: "um", vocNS :"um", accNS : "um", genNS : "ī", datNS : "ō", ablNS : "ō", 
+				nomMP : "ī", vocMP : "ī", accMP : "ōs", genMP : "ōrum", datMP : "īs", ablMP : "īs",
+				nomFP : "ae", vocFP : "ae", accFP : "ās", genFP : "ārum", datFP : "īs", ablFP : "īs",
+				nomNP : "a", vocNP : "a", accNP : "a", genNP : "ōrum", datNP : "īs", ablNP : "īs"},
+		    	 {name : "Miser", altStem : "", stem : "miser", nomMS: "", vocMS :"", accMS : "um", genMS : "ī", datMS : "ō", ablMS : "ō",
+				nomFS: "a", vocFS :"a", accFS : "am", genFS : "ae", datFS : "ae", ablFS : "ā", 
+				nomNS: "um", vocNS :"um", accNS : "um", genNS : "ī", datNS : "ō", ablNS : "ō", 
+				nomMP : "ī", vocMP : "ī", accMP : "ōs", genMP : "ōrum", datMP : "īs", ablMP : "īs",
+				nomFP : "ae", vocFP : "ae", accFP : "ās", genFP : "ārum", datFP : "īs", ablFP : "īs",
+				nomNP : "a", vocNP : "a", accNP : "a", genNP : "ōrum", datNP : "īs", ablNP : "īs"},
+			{name : "Pulcher", altStem : "", stem : "pulchr", nomMS: "", vocMS :"", accMS : "um", genMS : "ī", datMS : "ō", ablMS : "ō",
+				nomFS: "a", vocFS :"a", accFS : "am", genFS : "ae", datFS : "ae", ablFS : "ā", 
+				nomNS: "um", vocNS :"um", accNS : "um", genNS : "ī", datNS : "ō", ablNS : "ō", 
+				nomMP : "ī", vocMP : "ī", accMP : "ōs", genMP : "ōrum", datMP : "īs", ablMP : "īs",
+				nomFP : "ae", vocFP : "ae", accFP : "ās", genFP : "ārum", datFP : "īs", ablFP : "īs",
+				nomNP : "a", vocNP : "a", accNP : "a", genNP : "ōrum", datNP : "īs", ablNP : "īs"}				    	     
+		    ];
+
+	var abbrevDeclensions = ["Nom", "Voc", "Acc", "Gen", "Dat", "Abl"];
+	var lcaseDeclensions = ["nom", "voc", "acc", "gen", "dat", "abl"];
+	var abbrevGender = ["M", "F", "N"];
+
+	adjectiveSelected = 0;
+	idSelectedInput = "";	
+
+	
+	function clearTable()
+	{
+		for(i=0; i< 6; i++)
+		{//clear input boxes and hide results cells
+			var strAbbrev = abbrevDeclensions[i];
+			for(c=0; c< 3; c++)
+			{	
+				document.getElementById("txt" + strAbbrev + abbrevGender[c] + "S").value = "";
+				document.getElementById("txt" + strAbbrev + abbrevGender[c] + "P").value = "";
+				document.getElementById("td" + strAbbrev  + "Res" +  abbrevGender[c] + "S").innerHTML = "";			
+				document.getElementById("td" + strAbbrev +  "Res" + abbrevGender[c] + "S").style.backgroundColor = "white";
+				document.getElementById("td" + strAbbrev + "Col" + abbrevGender[c] + "S").innerHTML = "";
+				document.getElementById("td" + strAbbrev  + "Col" + abbrevGender[c] + "S").style.backgroundColor = "white";
+				
+				document.getElementById("td" + strAbbrev  + "Res" +  abbrevGender[c] + "P").innerHTML = "";			
+				document.getElementById("td" + strAbbrev +  "Res" + abbrevGender[c] + "P").style.backgroundColor = "white";
+				document.getElementById("td" + strAbbrev + "Col" + abbrevGender[c] + "P").innerHTML = "";
+				document.getElementById("td" + strAbbrev  + "Col" + abbrevGender[c] + "P").style.backgroundColor = "white";
+	
+			}		
+	
+		}
+		
+	}
+
+
+	function setAdjectives(intAdjective)
+	{	
+		adjectiveSelected = intAdjective;
+		
+		var stemName = adjectives[intAdjective].stem;
+		stemNameP = stemName;
+		
+		lblSelectedAdjective.innerHTML = adjectives[intAdjective].name;			   
+		
+		for(c=0; c<3; c++)
+		{				 		
+			for(i=0; i< 6; i++)
+			{	
+				var strAbbrev = abbrevDeclensions[i];				
+
+				if(stemNameP =="pulchr")
+				{//Nom + Acc male of pulcher are different
+					if((c==0)&&(i < 2))
+						{stemName = "pulcher"}	
+					else
+						{stemName = "pulchr"}
+				}					
+				document.getElementById("lbl" + strAbbrev + abbrevGender[c] + "S").innerHTML = stemName;	
+				document.getElementById("lbl" + strAbbrev + abbrevGender[c] + "P").innerHTML = stemNameP;		     		
+			}
+		}
+		
+		clearTable()
+		divExercise.style.display = "inline";
+		divSelect.style.display = "none";
+	}
+	
+	
+	
+
+	function checkAdjectives()
+	{
+		for(i=0; i< 6; i++)
+		{//clear input boxes and hide results cells
+			var strAbbrev = abbrevDeclensions[i];
+			var lCase = lcaseDeclensions[i];			
+			
+			for(c=0; c< 3; c++)
+			{				
+				doComparison("txt" + strAbbrev + abbrevGender[c] + "S",
+				  eval("adjectives[" + adjectiveSelected + "]." + lCase + abbrevGender[c] + "S"), 
+					"td" + strAbbrev + "Res" + abbrevGender[c] + "S", "td" + strAbbrev + "Col" + abbrevGender[c] + "S")
+				
+				doComparison("txt" + strAbbrev + abbrevGender[c] + "P",
+				  eval("adjectives[" + adjectiveSelected + "]." + lCase + abbrevGender[c] + "P"), 
+					"td" + strAbbrev + "Res" + abbrevGender[c] + "P", "td" + strAbbrev + "Col" + abbrevGender[c] + "P")						
+
+			}
+		}
+	}
+
+	function doComparison(userEntry, correctValue, resultCell, colourCell)
+	{			
+		document.getElementById(colourCell).style.display = "inline";
+		if(document.getElementById(userEntry).value == correctValue)
+		{
+			document.getElementById(colourCell).innerHTML = "yes" + "&nbsp";
+			document.getElementById(colourCell).style.backgroundColor = "green";
+			document.getElementById(resultCell).innerHTML = ""
+		}
+		else
+		{
+			document.getElementById(colourCell).style.backgroundColor = "red"
+			document.getElementById(colourCell).innerHTML = "no" + "&nbsp";
+			if(correctValue==""){correctValue="left blank"};
+			document.getElementById(resultCell).innerHTML = "It should be ..<STRONG/>" + correctValue + " " + "</STRONG>&nbsp"			
+		};
+	}
+
+
+	function setSelId(strID)
+	{
+		idSelectedInput = strID;
+	}
+
+	function insertSymbol(strSymbol)
+	{		
+		idSelectedInput.value = idSelectedInput.value + strSymbol;
+		idSelectedInput.focus();
+		idSelectedInput.selectionStart = idSelectedInput.value.length
+		idSelectedInput.selectionEnd = idSelectedInput.value.length
+	}
+
+	function reset()
+	{		
+		divSelect.style.display = "inline";
+		divExercise.style.display = "none";
+	}
+</script>
+
+</head>
+<body>		
+	<h3>Adjective Declension Test</h3>
+	<div id="divSelect">
+	Select a button to test an adjective declension, then enter the adjuective endings. When complete, press the "Check Answers" button <Br/><Br/>
+	<button onclick="setAdjectives(0)">1. Mult -us -a -um</button><button onclick="setAdjectives(1)">1 + 2. Miser -a - um</button>
+		<button onclick="setAdjectives(2)">1 +2. Pulcher pulchr-a -um</button>
+	
+	</div>
+	
+	<div id="divExercise" style="display : none">
+	Press the "Check Answers" button once endings entered.  Click one of the vowel buttons below to insert a long vowel at the end of an input box. 
+	<br/>Press "Reset/Another Adjective" button to get back to choice of noun declension
+	<br/><Br/>
+	<button onclick="reset()">Reset/Another Adjective</button>&nbsp;
+	
+	<Br/><Br/>
+
+	Adjective Selected: <label id="lblSelectedAdjective" style="font-size : 120%"></label>
+	<Br/><Br/>	
+	
+	<hr/>
+	<Br/>
+	<button onclick="checkAdjectives()">Check Answers</button> &nbsp;&nbsp;&nbsp; <button onclick="insertSymbol('ā')">ā</button>
+			&nbsp;<button onclick="insertSymbol('ī')">ī</button>&nbsp;<button onclick="insertSymbol('ō')">ō</button>
+			<button onclick="insertSymbol('ē')">ē</button>
+	<Br/><Br/><Br/>
+	
+	<table>
+		<tr>
+			<th colspan="14">Singular</th>			
+			<th></th>
+			<th colspan="14">Plural</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="4" class="gender">Masculine</td>
+			<td colspan="4" class="gender">Feminine</td>
+			<td colspan="4" class="gender">Neuter</td>
+			<td></td>
+			<td colspan="4" class="gender">Masculine</td>
+			<td colspan="4" class="gender">Feminine</td>
+			<td colspan="4" class="gender">Neuter</td>
+		</tr>
+		<tr>
+			<td bgColor="silver">Nom</td>
+
+			<td id="lblNomMS"></td>
+			<td><input id="txtNomMS" onfocus="setSelId(txtNomMS)"/></td>
+			<td id="tdNomColMS"></td>
+			<td id="tdNomResMS"></td>
+			
+			<td id="lblNomFS"></td>
+			<td><input id="txtNomFS" onfocus="setSelId(txtNomFS)"/></td>
+			<td id="tdNomColFS"></td>
+			<td id="tdNomResFS"></td>
+			
+			<td id="lblNomNS"></td>			
+			<td><input id="txtNomNS" onfocus="setSelId(txtNomNS)"/></td>
+			<td id="tdNomColNS"></td>
+			<td id="tdNomResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblNomMP"></td>
+			<td><input id="txtNomMP" onfocus="setSelId(txtNomMP)"/></td>
+			<td id="tdNomColMP"></td>
+			<td id="tdNomResMP"></td>
+
+			<td id="lblNomFP"></td>
+			<td><input id="txtNomFP" onfocus="setSelId(txtNomFP)"/></td>
+			<td id="tdNomColFP"></td>
+			<td id="tdNomResFP"></td>
+
+			<td id="lblNomNP"></td>
+			<td><input id="txtNomNP" onfocus="setSelId(txtNomNP)"/></td>
+			<td id="tdNomColNP"></td>
+			<td id="tdNomResNP"></td>		
+		</tr>
+		<tr>
+			<td bgColor="silver">Voc</td>
+			
+			<td id="lblVocMS"></td>
+			<td><input id="txtVocMS" onfocus="setSelId(txtVocMS)"/></td>
+			<td id="tdVocColMS"></td>
+			<td id="tdVocResMS"></td>
+
+			<td id="lblVocFS"></td>
+			<td><input id="txtVocFS" onfocus="setSelId(txtVocFS)"/></td>
+			<td id="tdVocColFS"></td>
+			<td id="tdVocResFS"></td>
+
+			<td id="lblVocNS"></td>
+			<td><input id="txtVocNS" onfocus="setSelId(txtVocNS)"/></td>
+			<td id="tdVocColNS"></td>
+			<td id="tdVocResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblVocMP"></td>
+			<td><input id="txtVocMP" onfocus="setSelId(txtVocMP)"/></td>
+			<td id="tdVocColMP"></td>
+			<td id="tdVocResMP"></td>
+
+			<td id="lblVocFP"></td>
+			<td><input id="txtVocFP" onfocus="setSelId(txtVocFP)"/></td>
+			<td id="tdVocColFP"></td>
+			<td id="tdVocResFP"></td>
+
+			<td id="lblVocNP"></td>
+			<td><input id="txtVocNP" onfocus="setSelId(txtVocNP)"/></td>
+			<td id="tdVocColNP"></td>
+			<td id="tdVocResNP"></td>
+		</tr>
+		<tr>
+			<td bgColor="silver">Acc</td>
+
+			<td id="lblAccMS"></td>
+			<td><input id="txtAccMS" onfocus="setSelId(txtAccMS)"/></td>
+			<td id="tdAccColMS"></td>
+			<td id="tdAccResMS"></td>
+
+			<td id="lblAccFS"></td>
+			<td><input id="txtAccFS" onfocus="setSelId(txtAccFS)"/></td>
+			<td id="tdAccColFS"></td>
+			<td id="tdAccResFS"></td>
+
+			<td id="lblAccNS"></td>
+			<td><input id="txtAccNS" onfocus="setSelId(txtAccNS)"/></td>
+			<td id="tdAccColNS"></td>
+			<td id="tdAccResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblAccMP"></td>
+			<td><input id="txtAccMP" onfocus="setSelId(txtAccMP)"/></td>
+			<td id="tdAccColMP"></td>
+			<td id="tdAccResMP"></td>
+
+			<td id="lblAccFP"></td>
+			<td><input id="txtAccFP" onfocus="setSelId(txtAccFP)"/></td>
+			<td id="tdAccColFP"></td>
+			<td id="tdAccResFP"></td>
+
+			<td id="lblAccNP"></td>
+			<td><input id="txtAccNP" onfocus="setSelId(txtAccNP)"/></td>
+			<td id="tdAccColNP"></td>
+			<td id="tdAccResNP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Gen</td>
+
+			<td id="lblGenMS"></td>
+			<td><input id="txtGenMS" onfocus="setSelId(txtGenMS)"/></td>
+			<td id="tdGenColMS"></td>
+			<td id="tdGenResMS"></td>
+
+
+			<td id="lblGenFS"></td>
+			<td><input id="txtGenFS" onfocus="setSelId(txtGenFS)"/></td>
+			<td id="tdGenColFS"></td>
+			<td id="tdGenResFS"></td>
+
+
+			<td id="lblGenNS"></td>
+			<td><input id="txtGenNS" onfocus="setSelId(txtGenNS)"/></td>
+			<td id="tdGenColNS"></td>
+			<td id="tdGenResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblGenMP"></td>
+			<td><input id="txtGenMP" onfocus="setSelId(txtGenMP)"/></td>
+			<td id="tdGenColMP"></td>
+			<td id="tdGenResMP"></td>
+
+			<td id="lblGenFP"></td>
+			<td><input id="txtGenFP" onfocus="setSelId(txtGenFP)"/></td>
+			<td id="tdGenColFP"></td>
+			<td id="tdGenResFP"></td>
+
+
+			<td id="lblGenNP"></td>
+			<td><input id="txtGenNP" onfocus="setSelId(txtGenNP)"/></td>
+			<td id="tdGenColNP"></td>
+			<td id="tdGenResNP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Dat</td>
+
+			<td id="lblDatMS"></td>
+			<td><input id="txtDatMS" onfocus="setSelId(txtDatMS)"/></td>
+			<td id="tdDatColMS"></td>
+			<td id="tdDatResMS"></td>
+
+
+			<td id="lblDatFS"></td>
+			<td><input id="txtDatFS" onfocus="setSelId(txtDatFS)"/></td>
+			<td id="tdDatColFS"></td>
+			<td id="tdDatResFS"></td>
+
+
+			<td id="lblDatNS"></td>
+			<td><input id="txtDatNS" onfocus="setSelId(txtDatNS)"/></td>
+			<td id="tdDatColNS"></td>
+			<td id="tdDatResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblDatMP"></td>
+			<td><input id="txtDatMP" onfocus="setSelId(txtDatMP)"/></td>
+			<td id="tdDatColMP"></td>
+			<td id="tdDatResMP"></td>
+
+			<td id="lblDatFP"></td>
+			<td><input id="txtDatFP" onfocus="setSelId(txtDatFP)"/></td>
+			<td id="tdDatColFP"></td>
+			<td id="tdDatResFP"></td>
+
+			<td id="lblDatNP"></td>
+			<td><input id="txtDatNP" onfocus="setSelId(txtDatNP)"/></td>
+			<td id="tdDatColNP"></td>
+			<td id="tdDatResNP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Abl</td>
+
+			<td id="lblAblMS"></td>
+			<td><input id="txtAblMS" onfocus="setSelId(txtAblMS)"/></td>
+			<td id="tdAblColMS"></td>
+			<td id="tdAblResMS"></td>
+
+			<td id="lblAblFS"></td>
+			<td><input id="txtAblFS" onfocus="setSelId(txtAblFS)"/></td>
+			<td id="tdAblColFS"></td>
+			<td id="tdAblResFS"></td>
+
+			<td id="lblAblNS"></td>
+			<td><input id="txtAblNS" onfocus="setSelId(txtAblNS)"/></td>
+			<td id="tdAblColNS"></td>
+			<td id="tdAblResNS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblAblMP"></td>
+			<td><input id="txtAblMP" onfocus="setSelId(txtAblMP)"/></td>
+			<td id="tdAblColMP"></td>
+			<td id="tdAblResMP"></td>
+
+			<td id="lblAblFP"></td>
+			<td><input id="txtAblFP" onfocus="setSelId(txtAblFP)"/></td>
+			<td id="tdAblColFP"></td>
+			<td id="tdAblResFP"></td>
+
+			<td id="lblAblNP"></td>
+			<td><input id="txtAblNP" onfocus="setSelId(txtAblNP)"/></td>
+			<td id="tdAblColNP"></td>
+			<td id="tdAblResNP"></td>
+		</tr>
+	</table>
+
+	</div>
+</body>
+</HTML>              
