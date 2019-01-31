@@ -1,0 +1,300 @@
+!DOCTYPE html><html><!-- saved from url=(0014)about:internet -->
+<head>
+<style> 
+	body {font-family : Arial}	
+	h2, h3 {color : navy}	
+
+	 
+	input {font-size: 100%; width : 4em}	
+
+</style>
+<script>
+	var nouns = [{name : "Serua", altStem : "", stem : "seru", nomS: "a", vocS :"a", accS : "am", genS : "ae", datS : "ae", ablS : "ā",	 
+				nomP : "ae", vocP : "ae", accP : "ās", genP : "ārum", datP : "īs", ablP : "īs"},
+		     {name : "Seruus", altStem : "", stem : "seru", nomS: "us", vocS :"e", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "ī", vocP : "ī", accP : "ōs", genP : "ōrum", datP : "īs", ablP : "īs"},
+		     {name : "Puer", altStem : "", stem : "puer", nomS: "", vocS :"", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "ī", vocP : "ī", accP : "ōs", genP : "ōrum", datP : "īs", ablP : "īs"},
+		     {name : "Somnium", altStem : "", stem : "somni", nomS: "um", vocS :"um", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "a", vocP : "a", accP : "a", genP : "ōrum", datP : "īs", ablP : "īs"},
+		     {name : "Uir", altStem : "", stem : "uir", nomS: "", vocS :"", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "ī", vocP : "ī", accP : "ōs", genP : "ōrum", datP : "īs", ablP : "īs"}, 
+		     {name : "Culter", altStem : "cultr", altStemStart : "Acc", stem : "culter", nomS: "", vocS :"", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "ī", vocP : "ī", accP : "ōs", genP : "ōrum", datP : "īs", ablP : "īs"},
+		     {name : "Fur", altStem : "", stem : "fūr", nomS: "", vocS :"", accS : "em", genS : "is", datS : "ī", ablS : "e",	 
+				nomP : "ēs", vocP : "ēs", accP : "ēs", genP : "um", datP : "ibus", ablP : "ibus"},
+		     {name : "Aedis", altStem : "", stem : "aed", nomS: "is", vocS :"is", accS : "em", genS : "is", datS : "ī", ablS : "e",	 
+				nomP : "ēs", vocP : "ēs", accP : "īs", genP : "ium", datP : "ibus", ablP : "ibus"},
+		     {name : "Nōmen", altStem : "nōmin", altStemStart : "Gen", stem : "nōmen", nomS: "", vocS :"", accS : "", genS : "is", datS : "ī", ablS : "e",	 
+				nomP : "a", vocP : "a", accP : "a", genP : "um", datP : "ibus", ablP : "ibus"},
+		     {name : "Deus", altStem : "d", altStemStart : "", stem : "de", nomS: "us", vocS :"us", accS : "um", genS : "ī", datS : "ō", ablS : "ō",	 
+				nomP : "ī", vocP : "ī", accP : "ōs", genP : "ōrum", datP : "īs", ablP : "īs"}
+		    ];
+
+	var abbrevDeclensions = ["Nom", "Voc", "Acc", "Gen", "Dat", "Abl"];
+
+	nounSelected = 0;
+	idSelectedInput = "";	
+
+	
+	function clearTable()
+	{
+		for(i=0; i< 6; i++)
+		{//clear input boxes and hide results cells			
+			document.getElementById("txt" + abbrevDeclensions[i] + "S").value = "";			
+			document.getElementById("txt" + abbrevDeclensions[i] + "P").value = "";
+			document.getElementById("td" + abbrevDeclensions[i] + "ResS").style.display = "none";			
+			document.getElementById("td" + abbrevDeclensions[i] + "ResP").style.display = "none";			
+			document.getElementById("td" + abbrevDeclensions[i] + "ColS").style.display = "none";
+			document.getElementById("td" + abbrevDeclensions[i] + "ColP").style.display = "none";			
+		}
+		
+	}
+
+
+	function setNouns(intNoun)
+	{		
+		nounSelected = intNoun;
+		
+		var stemName = nouns[intNoun].stem;			
+		lblSelectedNoun.innerHTML = nouns[intNoun].name;
+		
+		var altStemStart = ""
+		strAltStem = nouns[intNoun].altStem
+		if(strAltStem != ""){altStemStart = nouns[intNoun].altStemStart};
+		
+		
+		for(i=0; i< 6; i++)
+		{		     
+		     var strAbbrev = abbrevDeclensions[i];
+
+		    //if stem changes according to case, then change it		    	
+		     if(strAbbrev == altStemStart){stemName = strAltStem};
+		     
+		     //show stem name to user - e.g. "Seru"		
+		     document.getElementById("lbl" + strAbbrev + "S").innerHTML = stemName;
+ 		     if(strAltStem=="")
+		     {
+			document.getElementById("lbl" + strAbbrev + "P").innerHTML = stemName;
+		     }
+		     else
+		     {//if the stem changes, it occurs at some point in the singular, and the plural always uses slightly different stem
+		         if((strAltStem=="d")&&((strAbbrev =="Acc")||(strAbbrev =="Gen"))) 
+			 {
+				//deus is irregular - changes back to singular stem for Acc + Gen
+				document.getElementById("lbl" + strAbbrev + "P").innerHTML = stemName;
+			 }
+			 else
+			 {
+				document.getElementById("lbl" + strAbbrev + "P").innerHTML = strAltStem;
+			 };			
+		     }
+		     
+		}
+		
+		clearTable()
+
+		divExercise.style.display = "inline";
+		divSelect.style.display = "none";
+	}
+	
+	
+	
+
+	function checkNouns()
+	{	
+
+		doComparison("txtNomS", nouns[nounSelected].nomS, "tdNomResS", "tdNomColS")
+		doComparison("txtNomP", nouns[nounSelected].nomP, "tdNomResP", "tdNomColP")
+
+		doComparison("txtVocS", nouns[nounSelected].vocS, "tdVocResS", "tdVocColS")
+		doComparison("txtVocP", nouns[nounSelected].vocP, "tdVocResP", "tdVocColP")
+
+		doComparison("txtAccS", nouns[nounSelected].accS, "tdAccResS", "tdAccColS")
+		doComparison("txtAccP", nouns[nounSelected].accP, "tdAccResP", "tdAccColP")
+
+		doComparison("txtGenS", nouns[nounSelected].genS, "tdGenResS", "tdGenColS")
+		doComparison("txtGenP", nouns[nounSelected].genP, "tdGenResP", "tdGenColP")
+
+		doComparison("txtDatS", nouns[nounSelected].datS, "tdDatResS", "tdDatColS")
+		doComparison("txtDatP", nouns[nounSelected].datP, "tdDatResP", "tdDatColP")
+
+		doComparison("txtAblS", nouns[nounSelected].ablS, "tdAblResS", "tdAblColS")
+		doComparison("txtAblP", nouns[nounSelected].ablP, "tdAblResP", "tdAblColP")
+		
+	}
+
+	function doComparison(userEntry, correctValue, resultCell, colourCell)
+	{			
+		document.getElementById(colourCell).style.display = "inline";
+		if(document.getElementById(userEntry).value == correctValue)
+		{
+			document.getElementById(colourCell).innerHTML = "correct" + "&nbsp";
+			document.getElementById(colourCell).style.backgroundColor = "green";
+			document.getElementById(resultCell).style.display = "none"
+		}
+		else
+		{
+			document.getElementById(colourCell).style.backgroundColor = "red"
+			document.getElementById(colourCell).innerHTML = "wrong" + "&nbsp";
+			if(correctValue==""){correctValue="left blank"};
+			document.getElementById(resultCell).innerHTML = "It should be ..<STRONG/>" + correctValue + " " + "</STRONG>&nbsp"
+			document.getElementById(resultCell).style.display = "inline"
+		};
+	}
+
+
+	function setSelId(strID)
+	{
+		idSelectedInput = strID;
+	}
+
+	function insertSymbol(strSymbol)
+	{		
+		idSelectedInput.value = idSelectedInput.value + strSymbol;
+		idSelectedInput.focus();
+		idSelectedInput.selectionStart = idSelectedInput.value.length
+		idSelectedInput.selectionEnd = idSelectedInput.value.length
+	}
+
+	function reset()
+	{
+		divSelect.style.display = "inline";
+		divExercise.style.display = "none";
+	}
+</script>
+
+</head>
+<body>		
+	<h3>Noun Declension Test</h3>
+	<div id="divSelect">
+	Select a button to test a noun declension, then enter the nouns endings. When complete, press the "Check Answers" button <Br/><Br/>
+	<button onclick="setNouns(0)">1.f. Serua</button><button onclick="setNouns(1)">2.m. Seruus -</button><button onclick="setNouns(2)">2.m. Puer</button>
+	<button onclick="setNouns(3)">2.n. Somnium</button><button onclick="setNouns(4)">2.m. Uir</button><button onclick="setNouns(5)">2.m. Culter</button>
+	<button onclick="setNouns(9)">2.irregular. Deus</button>
+	<button onclick="setNouns(6)">3.m. Fur</button><button onclick="setNouns(7)">3.f. Aedis</button><button onclick="setNouns(8)">3.n. Nōmen</button>
+	
+	</div>
+	
+	<div id="divExercise" style="display : none">
+	Press the "Check Answers" button once endings entered.  Click one of the vowel buttons below to insert a long vowel at the end of an input box. 
+	<br/>Press "Reset/Another Noun" button to get back to choice of noun declension
+	<br/><Br/>
+	<button onclick="reset()">Reset/Another Noun</button>&nbsp;
+	
+	<Br/><Br/>
+
+	Noun Selected: <label id="lblSelectedNoun" style="font-size : 120%"></label>
+	<Br/><Br/>	
+	
+	<hr/>
+	<Br/>
+	<button onclick="checkNouns()">Check Answers</button> &nbsp;&nbsp;&nbsp; <button onclick="insertSymbol('ā')">ā</button>
+			&nbsp;<button onclick="insertSymbol('ī')">ī</button>&nbsp;<button onclick="insertSymbol('ō')">ō</button>
+			<button onclick="insertSymbol('ē')">ē</button>
+	<Br/><Br/><Br/>
+	
+	<table>
+		<tr>
+			<th colspan="4">Singular</th>
+			<th></th>
+			<th colspan="4">Plural</th>
+		</tr>
+		<tr>
+			<td bgColor="silver">Nom</td>
+
+			<td id="lblNomS"></td>
+			<td><input id="txtNomS" onfocus="setSelId(txtNomS)"/></td>
+			<td id="tdNomColS"></td>
+			<td id="tdNomResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblNomP"></td>
+			<td><input id="txtNomP" onfocus="setSelId(txtNomP)"/></td>
+			<td id="tdNomColP"></td>
+			<td id="tdNomResP"></td>		
+		</tr>
+		<tr>
+			<td bgColor="silver">Voc</td>
+			
+			<td id="lblVocS"></td>
+			<td><input id="txtVocS" onfocus="setSelId(txtVocS)"/></td>
+			<td id="tdVocColS"></td>
+			<td id="tdVocResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblVocP"></td>
+			<td><input id="txtVocP" onfocus="setSelId(txtVocP)"/></td>
+			<td id="tdVocColP"></td>
+			<td id="tdVocResP"></td>
+		</tr>
+		<tr>
+			<td bgColor="silver">Acc</td>
+
+			<td id="lblAccS"></td>
+			<td><input id="txtAccS" onfocus="setSelId(txtAccS)"/></td>
+			<td id="tdAccColS"></td>
+			<td id="tdAccResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblAccP"></td>
+			<td><input id="txtAccP" onfocus="setSelId(txtAccP)"/></td>
+			<td id="tdAccColP"></td>
+			<td id="tdAccResP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Gen</td>
+
+			<td id="lblGenS"></td>
+			<td><input id="txtGenS" onfocus="setSelId(txtGenS)"/></td>
+			<td id="tdGenColS"></td>
+			<td id="tdGenResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblGenP"></td>
+			<td><input id="txtGenP" onfocus="setSelId(txtGenP)"/></td>
+			<td id="tdGenColP"></td>
+			<td id="tdGenResP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Dat</td>
+
+			<td id="lblDatS"></td>
+			<td><input id="txtDatS" onfocus="setSelId(txtDatS)"/></td>
+			<td id="tdDatColS"></td>
+			<td id="tdDatResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblDatP"></td>
+			<td><input id="txtDatP" onfocus="setSelId(txtDatP)"/></td>
+			<td id="tdDatColP"></td>
+			<td id="tdDatResP"></td>
+		</tr>
+
+		<tr>
+			<td bgColor="silver">Abl</td>
+
+			<td id="lblAblS"></td>
+			<td><input id="txtAblS" onfocus="setSelId(txtAblS)"/></td>
+			<td id="tdAblColS"></td>
+			<td id="tdAblResS"></td>
+
+			<td style="width : 3em"> </td>
+
+			<td id="lblAblP"></td>
+			<td><input id="txtAblP" onfocus="setSelId(txtAblP)"/></td>
+			<td id="tdAblColP"></td>
+			<td id="tdAblResP"></td>
+		</tr>
+	</table>
+
+	</div>
+</body>
+</HTML>              
